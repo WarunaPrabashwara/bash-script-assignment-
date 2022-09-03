@@ -1,0 +1,150 @@
+inventory file set eka create karanna mulin wenama script ekak liyamu 
+
+
+kali wala mulin ssh enable kalaa
+[ ssh install karala inna oni ]
+iita kalin terminal ekata internet hadanna oni
+ /etc/resolv.conf 	eke 
+nameserver 8.8.8.8		kiyala daaanna 
+meke ehema liyana eewa temporary . e kiyane reboot ekakin passe eewa nAthi wenwa 
+so 
+
+
+[ network restart karanne
+service networking restart]
+
+
+meka hariyata karaganna bari una nisa mama dan cent os eke development eka patananna yanne 
+
+
+
+to run bash 
+bash bash.sh
+
+bash script eka to take inventories to files
+vi runToMakeWhitelist.sh
+
+#!/bin/bash
+yum list installed |  awk '{print $1}'  > packages.txt
+#	apt list --installed |  awk '{print $1}'  > packages.txt
+systemctl list-units --type=service --all | head -n -7  | awk '{print $1}' | egrep -v '[^.a-zA-Z0-9.-]' > services.txt
+
+# sudo apt-get install net-tools -y
+yum install net-tools
+
+netstat -tulpn | grep LISTEN  > ports.txt
+arp -an | awk '{print $4}'  > aprovedmacs.txt
+
+
+
+===================bash one iwarai 
+
+
+dan bash eka  ass2.sh
+
+
+
+#!/bin/bash
+
+readarray -t packagesArrFi < packages.txt
+readarray -t servicesArrFi < services.txt
+readarray -t portsArrFi < ports.txt
+
+#	mapfile -t packageAr  < <( yum list installed |  awk '{print $1}'  )
+mapfile -t packageAr  < <(  apt list --installed |  awk '{print $1}'  > packages.txt   )
+mapfile -t servicesAr  < <( systemctl list-units --type=service --all | head -n -7  | awk '{print $1}' | egrep -v '[^.a-zA-Z0-9.-]'  )
+mapfile -t portsAr < <(netstat -tulpn | grep LISTEN  )
+
+for i in "${packageAr[@]}"
+do
+        if printf '%s\0' "${packagesArrFi[@]}" | grep -Fqxz "$i"
+        then
+          continue
+        else
+          echo 'suspecious package found :'  $i
+        fi
+done
+
+for i in "${servicesAr[@]}"
+do
+        if printf '%s\0' "${servicesArrFi[@]}" | grep -Fqxz "$i"
+        then
+          continue
+        else
+          echo 'suspecious service found : '  $i
+        fi
+
+done
+
+for i in "${portsAr[@]}"
+do
+        if printf '%s\0' "${portsArrFi[@]}" | grep -Fqxz "$i"
+        then
+          continue
+        else
+          echo 'suspecious ports found : '  $i
+        fi
+
+done
+
+#fifth question
+readarray -t arArrpFi < aprovedips.txt
+mapfile -t arpArr  < <(   arp -an | awk '{print $4}'   )
+
+for i in "${arpArr[@]}"
+do
+        if printf '%s\0' "${arArrpFi[@]}" | grep -Fqxz "$i"
+        then
+          continue
+        else
+          echo 'unaproved max is joined   : '  $i
+        fi
+
+done
+
+
+
+
+# 4th question 
+curl "http://dev.virtualearth.net/REST/v1/Imagery/Map/Road/-16.9206560000013,145.777730700002/15?mapSize=500,500&key=AlYOKsYd2-Kn51Hnnws3Ua_3TMbDjlO85lMbpdi9aT92DZe8NRyteXVvhzJOlViG" > htmlmap.png
+
+
+
+
+
+
+
+
+
+
+
+
+
+=========================================
+
+same directory eke 
+
+touch aprovedmacs.txt
+
+kiyala file ekak hadala mac list eka daanna
+
+
+
+
+
+
+
+
+msfconsole 
+use auxiliary/scanner/discovery/arp_sweep
+set RHOSTS 172.16.1.1-172.16.1.50
+
+
+
+
+
+
+
+
+
+
